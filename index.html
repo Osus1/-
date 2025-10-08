@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>دعوة - مبادرة أسس</title>
+<style>
+@font-face {
+  font-family: 'Lenos';
+  src: url('fonts/Lenos-Bold.otf') format('opentype');
+}
+
+:root{
+  --purple:#5b2d8e;
+  --orange:#ff8a00;
+  --bg-gradient: linear-gradient(135deg,var(--purple),var(--orange));
+  --card:#ffffffee;
+  --glass: rgba(255,255,255,0.06);
+  --accent:#f9f4ed;
+  --text-dark:#042141;
+  --shadow: 0 8px 24px rgba(5,5,10,0.25);
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: 'Lenos', sans-serif;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 10%), var(--bg-gradient);
+  color:var(--accent);
+  padding:24px;
+}
+
+.stage{
+  width:100%;
+  max-width:980px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border-radius:16px;
+  padding:20px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  align-items:center;
+}
+
+h1{margin:0 0 8px 0;font-size:20px;color:var(--accent)}
+p.lead{margin:0 0 18px 0;color:rgba(249,244,237,0.95)}
+
+.puzzle-wrap{
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02));
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+}
+
+.board{
+  width:100%;
+  max-width:420px;
+  height:260px;
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: repeat(2,1fr);
+  gap:10px;
+  align-items:center;
+  justify-items:center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+  border-radius:10px;
+  padding:12px;
+  margin-top:12px;
+}
+
+.slot{
+  width:120px;height:80px;border-radius:12px;background:transparent;border:2px dashed rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;position:relative;transition:all .25s ease;
+}
+.slot.filled{border-style:solid;border-color:rgba(255,255,255,0.12);background:var(--glass)}
+
+.pieces{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding-top:14px;
+}
+.piece{
+  width:110px;height:70px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:grab;
+  color:white;font-weight:700;padding:8px;text-align:center;user-select:none;box-shadow:0 6px 18px rgba(5,5,10,0.3);
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.piece:active{cursor:grabbing;transform:scale(.98);}
+.piece span{visibility:hidden;}
+
+/* ألوان القطع */
+.p1{background:linear-gradient(135deg,var(--orange),#7e3fb3)}
+.p2{background:linear-gradient(135deg,#7e3fb3,var(--orange))}
+.p3{background:linear-gradient(135deg,#7842b0,#ff9b4d)}
+.p4{background:linear-gradient(135deg,#622e97,#ff8a00)}
+.p5{background:linear-gradient(135deg,#4b1f77,#ff7a00)}
+
+.overlay{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,2,6,0.56);opacity:0;pointer-events:none;transition:opacity .28s ease;
+}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.modal{background:var(--card);padding:20px;border-radius:12px;max-width:640px;width:94%;box-shadow:var(--shadow);color:var(--text-dark)}
+.modal h2{margin:0 0 8px 0}
+.word-appear{font-weight:800;font-size:18px;color:var(--purple);margin-bottom:8px}
+
+a{color:var(--purple);text-decoration:none}
+</style>
+</head>
+<body>
+<main class="stage">
+<h1>أهلًا وسهلًا، عندنا لكم سر</h1>
+<p class="lead">ركّبوا القطع الخمسة عشان تعرفونه.</p>
+
+<div class="puzzle-wrap">
+  <!-- شعار أسس -->
+  <img src="Images/logo.png" alt="شعار أسس" style="width:80px; display:block; margin:0 auto 12px;" />
+
+  <div class="board" id="board">
+    <div class="slot" data-slot="1"></div>
+    <div class="slot" data-slot="2"></div>
+    <div class="slot" data-slot="3"></div>
+    <div class="slot" data-slot="4"></div>
+    <div class="slot" data-slot="5"></div>
+  </div>
+
+  <div class="pieces" id="pieces">
+    <div class="piece p1" draggable="true" data-word="التأسيس" data-id="p1"><span>التأسيس</span></div>
+    <div class="piece p2" draggable="true" data-word="الأصالة" data-id="p2"><span>الأصالة</span></div>
+    <div class="piece p3" draggable="true" data-word="الوضوح" data-id="p3"><span>الوضوح</span></div>
+    <div class="piece p4" draggable="true" data-word="التمكين" data-id="p4"><span>التمكين</span></div>
+    <div class="piece p5" draggable="true" data-word="الشغف" data-id="p5"><span>الشغف</span></div>
+  </div>
+</div>
+</main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal">
+    <div class="word-appear" id="wordAppear"> كشفت السر</div>
+    <h2>🧩 مبادرة أُسُـس تدعوكم لحضور حفل تدشينها الرسمي</h2>
+    <p>يسرّنا أن نشارككم لحظة انطلاق أسـس، حيث نضع اللبنة الأولى لمسيرة تُبنى على: <strong>التأسيس، الأصالة، الوضوح، التمكين، والشغف</strong>.</p>
+    <p><strong>المكان:</strong> <a href="https://maps.app.goo.gl/34GADAyNireJETc8A" target="_blank">شركة زنجبيل</a><br>
+    <strong>التاريخ:</strong> 16 أكتوبر 2025<br>
+    <strong>الوقت:</strong> 6 PM - 9 PM</p>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn ghost" id="closeModal">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const pieces = document.querySelectorAll('.piece');
+const slots = document.querySelectorAll('.slot');
+const overlay = document.getElementById('overlay');
+const wordAppear = document.getElementById('wordAppear');
+let placed = {};
+
+pieces.forEach(p => {
+  p.addEventListener('dragstart', ev => {
+    ev.dataTransfer.setData('text/plain', p.dataset.id);
+    setTimeout(()=>p.style.opacity='0.6', 20);
+  });
+  p.addEventListener('dragend', ev => { p.style.opacity='1'; });
+});
+
+slots.forEach(s => {
+  s.addEventListener('dragover', ev => ev.preventDefault());
+  s.addEventListener('drop', ev => {
+    ev.preventDefault();
+    const id = ev.dataTransfer.getData('text/plain');
+    const piece = document.querySelector(`.piece[data-id="${id}"]`);
+    if(!piece) return;
+
+    if(s.classList.contains('filled')){
+      const prev = s.querySelector('.piece');
+      if(prev){ 
+        document.getElementById('pieces').appendChild(prev); 
+        prev.style.transform=''; 
+        delete placed[s.dataset.slot]; 
+        prev.querySelector('span').style.visibility='hidden'; 
+      }
+    }
+
+    s.classList.add('filled');
+    piece.style.width='100%';
+    piece.style.height='100%';
+    piece.style.borderRadius='8px';
+    piece.style.cursor='default';
+    piece.querySelector('span').style.visibility='visible';
+    s.appendChild(piece);
+
+    placed[s.dataset.slot] = piece.dataset.id;
+    checkComplete();
+  });
+});
+
+function checkComplete(){
+  if(Object.keys(placed).length === slots.length){
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden','false');
+    const words = Array.from(document.querySelectorAll('.piece')).map(p=>p.dataset.word);
+    wordAppear.textContent = 'قيم أسس: ' + words.join(' • ');
+  }
+}
+
+document.getElementById('closeModal').addEventListener('click', ()=>{ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); });
+document.getElementById('gotIt').addEventListener('click', ()=>{ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); });
+</script>
+</body>
+</html>
